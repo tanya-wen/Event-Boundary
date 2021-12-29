@@ -1,0 +1,7 @@
+confirmation number: E35UoQWC
+put-assignmentid-here:3q5c1wp23qevm2nws4vmsi6jflo156
+put-workerid-here:a3v2xcdf45vn9x
+put-hitid-here:3bakuke4akpi45n0y93n6zfn3q3r1f
+put-studyid-here:2020-0188
+put-sscode-here:E35UoQWC
+experiment-name:Temporal Perception

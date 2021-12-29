@@ -1,0 +1,7 @@
+confirmation number: kISNaDhx
+put-assignmentid-here:32at8r96gpmc11c56oiewvl841msup
+put-workerid-here:aq53yjdpddlz
+put-hitid-here:375vsr8fwzmfz1886kcfytzzg59zr5
+put-studyid-here:2020-0188
+put-sscode-here:kISNaDhx
+experiment-name:Temporal Perception

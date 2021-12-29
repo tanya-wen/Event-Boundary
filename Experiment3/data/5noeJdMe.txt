@@ -1,0 +1,7 @@
+confirmation number: 5noeJdMe
+put-assignmentid-here:3uwn2hhpu2iz6bsw9n6si0teurtsn3
+put-workerid-here:a3azjgi9d7c0pd
+put-hitid-here:3t2hw4qdvykwn81ckpslwayk1hg9co
+put-studyid-here:2020-0188
+put-sscode-here:5noeJdMe
+experiment-name:Temporal Perception

@@ -1,0 +1,7 @@
+confirmation number: 83VTy1PC
+put-assignmentid-here:3x0h8uuit51pt51a1oxfej65piqswj
+put-workerid-here:a1t7eb1wedcmxv
+put-hitid-here:375vsr8fwzmfz1886kcfytzzg59zr5
+put-studyid-here:2020-0188
+put-sscode-here:83VTy1PC
+experiment-name:Temporal Perception

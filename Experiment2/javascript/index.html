@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="Tanya Wen" content="Temporal-Perception" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Stylesheets
+	============================================= -->
+    <link rel="stylesheet" href="css/tachyons.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/lois-style.css" type="text/css" />
+
+    <!--- Javascript on page load
+	============================================= -->
+    <script type="text/javascript">
+
+    </script>
+    <!-- Document Title
+	============================================= -->
+    <title>Temporal-Perception</title>
+
+</head>
+
+<body>
+    <noscript>
+        <p>Javascript has been disabled in your browser.</p>
+        <p>In order to complete this study, you must enable JavaScript.</p>
+        <p>Here are <a href="https://www.enable-javascript.com/">instructions on how to enable JavaScript in your web browser</a>.</p>
+    </noscript>
+    <header id='mal-header'>
+        <img style="max-height: 150px" id='mal-logo' src='images/logo3.png' alt='logo for mind at large lab' />
+    </header>
+
+    <div id='info-consent-letter'>
+        <p><b>Title of research study:</b> Investigating cognitive flexibility</p>
+        <p><b>Key Information</b></p>
+        <p>This consent form asks you to take part in a research study. This study is being conducted by the Egner Lab in the Center for Cognitive Neuroscience and Duke University. 
+        </p>
+        <p><b>Purpose:</b>The purpose of this study is to find out more about people's memories of when events occurred. We expect about 15 minutes to go through the instructions and practice. The main experiment should not exceed a maximum of 60 minutes. If you choose to take part in this study, you will be completing a task that involves correctly categorizing presented stimuli (such as images, words, etc.). You will be asked to do a memory task after each block. We ask that you complete this task as accurately as you are able to. We will also ask you common demographic questions about yourself. </p>
+        <p>This study is completely voluntary and you can withdraw from this study at any time by closing your Internet browser window, but you must continue to the final screen of the study to submit your results in order to receive course credit. </p>
+        <p>You will receive 1 course credits for your participation. </p>
+        <p><b>How your confidentiality will be maintained:</b>All data will be securely saved at all times on our lab computers. All personal identifiers will be removed from the data prior to storage, and any data shared publicly or used for future research purposes will never be linked to your identity. </p>
+        <p><b>Contact information:</b> If you have additional questions regarding this study, you may contact Professor Tobias Egner at (+1) 919-684-1049 or tobias.egner@duke.edu. If you have any questions about your rights as a research subject, you may contact the Human Subjects Protection at campusirb@duke.edu.</p>
+        <hr>
+        <p>By clicking on the “<b>I Agree to Participate</b>” button below, you indicate that you are 18 years of age or older, that you voluntarily agree to participate in this study and that you understand the information in this consent form. </p>
+        
+    </div>
+
+    <div id='decline-to-participate'>
+        <p>You have declined to participate at this time.</p>
+        <p>If you change your mind, simply reload this webpage.</p>
+    </div>
+    <button id='no-consent-btn' class='consent-btn' style="display: inline; visibility: visible">I do not agree to participate</button>
+    <button id='yes-consent-btn' class='consent-btn' style="display: inline; visibility: visible"><b>I agree to participate</b></button>
+
+    <!-- Javascript before page load
+    ============================================== -->
+    <script type="text/javascript" src="js/common/mTurk.js"></script>
+    <!-- custom JS -->
+    <script>
+        document.querySelector("#info-consent-letter").style.display = "block"
+        document.querySelector("#info-consent-letter").style.visibility = "visible"
+
+
+        document.querySelector("#no-consent-btn").addEventListener("click",
+            function() {
+                document.querySelector("#info-consent-letter").style.display = "none";
+                document.querySelector("#decline-to-participate").style.display = "block";
+                document.querySelector("#decline-to-participate").style.visibility = "visible";
+                document.querySelector("#no-consent-btn").style.display = "none";
+                document.querySelector("#yes-consent-btn").style.display = "none";
+            });
+
+
+        document.querySelector("#yes-consent-btn").addEventListener("click", function() {
+            let mt = mTurk.turkInfo()
+            let netID
+            while(!netID || isNaN(netID) || netID.length !== 5) {
+                netID = prompt("Please enter your SONA ID", "");
+            }
+            window.open("task.html?" + "workerid=" + netID + "&hitid=" + mt.hitId + "&assid=" + mt.assignmentId , "_self");
+        });
+
+      
+
+    </script>
+</body>

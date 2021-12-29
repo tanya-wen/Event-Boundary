@@ -1,0 +1,7 @@
+confirmation number: dBtsQQDN
+put-assignmentid-here:32z9zlut1pxsynesz8u6tbmhd4mohs
+put-workerid-here:a18qkm5z69tls
+put-hitid-here:39kv3a5d2bk8g62f2ek1xjbwsefs7u
+put-studyid-here:2020-0188
+put-sscode-here:dBtsQQDN
+experiment-name:Temporal Perception

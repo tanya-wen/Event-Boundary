@@ -1,0 +1,7 @@
+confirmation number: IrSMhe7E
+put-assignmentid-here:3l2is5hsfevflok0ys1sx1b2i6kunu
+put-workerid-here:aqwh9uy6fvu21
+put-hitid-here:3k2cedradeesg9mhvkrgq648pmomto
+put-studyid-here:2020-0188
+put-sscode-here:IrSMhe7E
+experiment-name:Temporal Perception

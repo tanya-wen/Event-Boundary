@@ -1,0 +1,7 @@
+confirmation number: PQwvegSM
+put-assignmentid-here:3aajc4i4fk50oxnpph88lm908mozjb
+put-workerid-here:a3ae72mi6k2wkr
+put-hitid-here:3o4vwc1gfzjxgki2d88xs18tr9fj3v
+put-studyid-here:2020-0188
+put-sscode-here:PQwvegSM
+experiment-name:Temporal Perception

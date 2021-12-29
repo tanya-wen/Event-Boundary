@@ -1,0 +1,7 @@
+confirmation number: CPEgiN83
+put-assignmentid-here:3z3zlgnnsm7gprk9z0x8emg77y4q37
+put-workerid-here:a2uya88ei0vgye
+put-hitid-here:3e6l1vr4yzzg81jodkfak6sl8ztf6z
+put-studyid-here:2020-0188
+put-sscode-here:CPEgiN83
+experiment-name:Temporal Perception

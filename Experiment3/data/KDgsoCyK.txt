@@ -1,0 +1,7 @@
+confirmation number: KDgsoCyK
+put-assignmentid-here:3uxuoq9okia63uefcg3c13di88qa7r
+put-workerid-here:a2v27a9gza1nr2
+put-hitid-here:3o4vwc1gfzjxgki2d88xs18tr9fj3v
+put-studyid-here:2020-0188
+put-sscode-here:KDgsoCyK
+experiment-name:Temporal Perception

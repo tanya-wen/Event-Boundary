@@ -1,0 +1,7 @@
+confirmation number: Uid2yFes
+put-assignmentid-here:3qemnnsb21c411hrwquer4lote67df
+put-workerid-here:a3ctxnq2gxiqsp
+put-hitid-here:322zsn9z6jxccjxbpgrk4cn83gtt4w
+put-studyid-here:2020-0188
+put-sscode-here:Uid2yFes
+experiment-name:Temporal Perception

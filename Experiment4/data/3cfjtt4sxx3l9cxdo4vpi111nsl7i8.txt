@@ -1,0 +1,7 @@
+confirmation number: GAfb8P1N
+put-assignmentid-here:3cfjtt4sxx3l9cxdo4vpi111nsl7i8
+put-workerid-here:a2yq4mh1kozeip
+put-hitid-here:3dw3bnf1hkvs8co26ehcm6ry22mv8w
+put-studyid-here:2020-0188
+put-sscode-here:GAfb8P1N
+experiment-name:Temporal Perception

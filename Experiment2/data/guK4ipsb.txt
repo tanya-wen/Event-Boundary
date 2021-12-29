@@ -1,0 +1,7 @@
+confirmation number: guK4ipsb
+put-assignmentid-here:NA
+put-workerid-here:85705
+put-hitid-here:NA
+put-studyid-here:2020-0188
+put-sscode-here:guK4ipsb
+experiment-name:Temporal Perception

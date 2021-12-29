@@ -1,0 +1,7 @@
+confirmation number: pIWabIlE
+put-assignmentid-here:31q0u3wydtsa961fgxajq2kf6qa71g
+put-workerid-here:a3royuo9lwa22s
+put-hitid-here:3z33ic0jd3zsmh7cb6nqm2m9m84v9l
+put-studyid-here:2020-0188
+put-sscode-here:pIWabIlE
+experiment-name:Temporal Perception

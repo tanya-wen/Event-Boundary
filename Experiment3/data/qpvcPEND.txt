@@ -1,0 +1,7 @@
+confirmation number: qpvcPEND
+put-assignmentid-here:3luy3gc633ddqykh1zl9ry2d7x97pt
+put-workerid-here:ans6ga4ypwhpr
+put-hitid-here:344m16ozllsw98pkhqhl4zt7rn1nev
+put-studyid-here:2020-0188
+put-sscode-here:qpvcPEND
+experiment-name:Temporal Perception

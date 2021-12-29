@@ -1,0 +1,7 @@
+confirmation number: 1BATCa5X
+put-assignmentid-here:3qapzx2qn8q3ggjre2pog6kxo9b02z
+put-workerid-here:a1tpgxt718d68e
+put-hitid-here:344m16ozllsw98pkhqhl4zt7rn1nev
+put-studyid-here:2020-0188
+put-sscode-here:1BATCa5X
+experiment-name:Temporal Perception

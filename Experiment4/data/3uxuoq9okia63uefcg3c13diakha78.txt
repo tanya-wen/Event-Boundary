@@ -1,0 +1,7 @@
+confirmation number: Svia5127
+put-assignmentid-here:3uxuoq9okia63uefcg3c13diakha78
+put-workerid-here:aeovyz83q3gx4
+put-hitid-here:3z33ic0jd3zsmh7cb6nqm2m9m84v9l
+put-studyid-here:2020-0188
+put-sscode-here:Svia5127
+experiment-name:Temporal Perception

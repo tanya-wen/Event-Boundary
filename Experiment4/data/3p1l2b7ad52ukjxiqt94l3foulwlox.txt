@@ -1,0 +1,7 @@
+confirmation number: 75diWNKE
+put-assignmentid-here:3p1l2b7ad52ukjxiqt94l3foulwlox
+put-workerid-here:a28v5xy8a0r6q5
+put-hitid-here:3fk4g712o0duz4m7qhicsa7sfszsso
+put-studyid-here:2020-0188
+put-sscode-here:75diWNKE
+experiment-name:Temporal Perception

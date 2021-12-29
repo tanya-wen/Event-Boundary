@@ -1,0 +1,7 @@
+confirmation number: LxKiirlt
+put-assignmentid-here:3kgtpgbs61yjw2v7c9385d8467r2u0
+put-workerid-here:a3cfnud7vr2e1e
+put-hitid-here:3bawbgqgzoco8yjjw9p686v3rigv79
+put-studyid-here:2020-0188
+put-sscode-here:LxKiirlt
+experiment-name:Temporal Perception
