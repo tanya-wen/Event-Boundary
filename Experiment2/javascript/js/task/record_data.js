@@ -194,7 +194,7 @@ function Data_row(obj) {
 
 function create_form() {
     let formHTML = [
-            "<form id='sendtoPHP' method='post' action='https://dibs-web01.vm.duke.edu/AMTSubmit/DataHandler_SONA_TW.php'' style='display: none'>",
+            "<form id='sendtoPHP' method='post' action='YOUR OWN PHP FILE'' style='display: none'>",
                 "<input type='hidden' name='put-assignmentid-here' id = 'put-assignmentid-here' value = ''/>",
                 "<input type='hidden' name='put-workerid-here' id = 'put-workerid-here' value = ''/>",
                 "<input type='hidden' name='put-hitid-here' id = 'put-hitid-here' value = ''/>",
