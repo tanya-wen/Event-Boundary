@@ -2,7 +2,7 @@
 clear all; close all; clc;
 addpath('/Users/tanyawen/Box/Home Folder tw260/Private/software/fdr_bh');
 
-addpath(genpath('/Users/tanyawen/Documents/GitHub/Event-Boundary'))
+addpath(genpath('/Users/tanyawen/Documents/GitHub/Event-Boundary/Experiment2/data'))
 files = dir('/Users/tanyawen/Documents/GitHub/Event-Boundary/Experiment2/data/*.log');
 fig_path = '/Users/tanyawen/Box/Home Folder tw260/Private/temporal perception/manuscript/figures';
 
@@ -36,8 +36,8 @@ for subj = 1:nsubj
     
     while subject_is_good    
 
-%         sub_age(subj_ind) = str2double(data.age{end});
-%         sub_gender{subj_ind} = data.gender{end};
+        sub_age(subj_ind) = str2double(data.age{end});
+        sub_gender{subj_ind} = data.gender{end};
         
     %% Obtain encoding accuracy
     encoding_acc = data.response_acc(main_encoding_ind);
@@ -49,16 +49,22 @@ for subj = 1:nsubj
     sub_acc(subj_ind,:) = squeeze(nanmean(acc,1));
     
     %% Obtain encoding reaction times
+    correct_ind = ~cellfun(@isempty,regexp(data.response_acc(main_encoding_ind),'true'));
     encoding_rts = data.response_time(main_encoding_ind);
+    encoding_rts(encoding_rts==0) = NaN;
+    encoding_rts(isoutlier(encoding_rts,'mean')) = NaN;
     for context = 1:length(main_encoding_ind)/10
         for trial = 1:10
-            rts(context,trial) = encoding_rts(10*(context-1)+trial);
+            if correct_ind(10*(context-1)+trial) == 0
+                rts(context,trial) = 0;
+            else
+                rts(context,trial) = encoding_rts(10*(context-1)+trial);
+            end
         end
     end
-    rts(rts==0) = NaN;
     sub_rts(subj_ind,:) = squeeze(nanmean(rts,1));
         
-    %% Obtain memory results
+    %% Obtain memory accuracy results
     encoding_imgages = data.stim(main_encoding_ind);
     left_images = data.left_image(main_memory_ind);
     right_images = data.right_image(main_memory_ind);
@@ -134,7 +140,7 @@ for subj = 1:nsubj
     end
     
     
-    %% compare within, between-small, and between-big memory results
+    %% compare within, between-small, and between-big memory accuracy results
     conds = {'within', 'between-small', 'between-big'};
     for cond = 1:3
         boundary_cond{cond} = find(~cellfun(@isempty,regexp(data.condition,conds{cond}))); 
@@ -150,6 +156,52 @@ for subj = 1:nsubj
         cond_distance_rating(subj_ind,cond) = mean(str2double(data.distance_response(boundary_cond{cond}))) + 1; % javascript start from 0
     end
     
+
+    %% Obtain memory RT results
+    % get rid of outliers
+    practice_mem_ind = setdiff(memory_ind,main_memory_ind);
+    order_response_time = data.order_response_time;
+    order_response_time(practice_mem_ind) = regexprep(order_response_time(practice_mem_ind), '.*', 'NA');
+    order_response_time = str2double(order_response_time);
+    order_response_time(isoutlier(str2double(data.order_response_time),'mean')) = NaN;
+    distance_response_time = data.distance_response_time;
+    distance_response_time(practice_mem_ind) = regexprep(distance_response_time(practice_mem_ind), '.*', 'NA');
+    distance_response_time = str2double(distance_response_time);
+    distance_response_time(isoutlier(str2double(data.order_response_time),'mean')) = NaN;
+
+    % order 
+    for i = 1:10
+        correct_ind = boundary_ind{i}(~cellfun(@isempty,regexp(data.order_acc(boundary_ind{i}),'1')));
+        order_rt(subj_ind,i) = nanmean(order_response_time(correct_ind));
+    end
+    for b = 1:2
+        correct_ind = b_ind{b}(~cellfun(@isempty,regexp(data.order_acc(b_ind{b}),'1')));
+        wb_order_rt{subj_ind,b,:} = nanmean(order_response_time(correct_ind));
+    end
+
+    % distance
+    for i = 1:10
+        correct_ind = boundary_ind{i}(~cellfun(@isempty,regexp(data.order_acc(boundary_ind{i}),'1')));
+        distance_rt(subj_ind,i) = nanmean(distance_response_time(correct_ind));
+    end
+    for b = 1:2
+        correct_ind = b_ind{b}(~cellfun(@isempty,regexp(data.order_acc(b_ind{b}),'1')));
+        wb_distance_rt{subj_ind,b,:} = nanmean(distance_response_time(correct_ind));
+    end
+
+    %% compare within, between-small, and between-big memory RT results
+
+    % order
+    for cond = 1:3
+        correct_ind = boundary_cond{cond}(~cellfun(@isempty,regexp(data.order_acc(boundary_cond{cond}),'1')));
+        cond_order_rt(subj_ind,cond) = nanmean(order_response_time(correct_ind));
+    end
+    
+    % distance
+    for cond = 1:3
+        correct_ind = boundary_cond{cond}(~cellfun(@isempty,regexp(data.order_acc(boundary_cond{cond}),'1')));
+        cond_distance_rt(subj_ind,cond) = nanmean(distance_response_time(correct_ind)); % javascript start from 0
+    end
     
     subj_ind = subj_ind + 1;
     break
@@ -195,7 +247,7 @@ print(gcf,fullfile(fig_path,'Exp2_encodingRT.eps'),'-depsc2','-painters');
 
 %comparisons_between_bars(xx, sub_rts)
 
-%% over 10 trials
+%% memory accuracy over 10 trials
 % temporal memory over time
 figure(3); hold on
 errorbar(1:10,mean(order_acc),std(order_acc)/sqrt(subj_ind-1), 'o-','MarkerSize',3,'Color',[189,189,189]/255,'LineWidth',1.5)
@@ -207,7 +259,7 @@ ax.FontSize = 18;
 ax.XLim = [0 11];
 ax.YLim = [0.5 1];
 set(gcf,'color','w');
-print(gcf,fullfile(fig_path,'Exp2_TemporalOrder.eps'),'-depsc2','-painters');
+print(gcf,fullfile(fig_path,'Exp2_TemporalOrderACC.eps'),'-depsc2','-painters');
 
 %comparisons_between_bars(xx, order_acc)
 
@@ -222,11 +274,11 @@ ax.FontSize = 18;
 ax.XLim = [0 11];
 ax.YLim = [1 4];
 set(gcf,'color','w');
-print(gcf,fullfile(fig_path,'Exp2_TemporalDistance.eps'),'-depsc2','-painters');
+print(gcf,fullfile(fig_path,'Exp2_TemporalDistanceACC.eps'),'-depsc2','-painters');
 
 %comparisons_between_bars(xx, distance_rating)
 
-%% by condition
+%% memory accuracy by condition
 xx = [1,2,3];
 
 % temporal memory over time
@@ -241,7 +293,7 @@ ax.FontSize = 18;
 ax.YLim = [0.5 1];
 set(gcf,'color','w');
 comparisons_between_bars(xx, cond_order_acc)
-print(gcf,fullfile(fig_path,'Exp2_TemporalOrderCondition.eps'),'-depsc2','-painters');
+print(gcf,fullfile(fig_path,'Exp2_TemporalOrderConditionACC.eps'),'-depsc2','-painters');
 
 
 % temporal distance over time
@@ -256,97 +308,159 @@ ax.FontSize = 18;
 ax.YLim = [1 4];
 set(gcf,'color','w');
 comparisons_between_bars(xx, cond_distance_rating)
-print(gcf,fullfile(fig_path,'Exp2_TemporalDistanceCondition.eps'),'-depsc2','-painters');
+print(gcf,fullfile(fig_path,'Exp2_TemporalDistanceConditionRating.eps'),'-depsc2','-painters');
 
-
-
-%% MPVA with features: (start and end) of (run, big block, small block)
-run_start = 1:1:30;
-run_end = 30:-1:1;
-bblock_start = repmat(1:1:10,1,3);
-bblock_end = repmat(10:-1:1,1,3);
-sblock_start = repmat(1:1:5,1,6);
-sblock_end = repmat(5:-1:1,1,6);
-wb = [0,0,1,1,1,0,0,2,2,2,0,0,1,1,1,0,0,2,2,2,0,0,1,1,1,0,0,2,2,2];
-
-figure(7);
-features = [run_start', run_end', bblock_start', bblock_end', sblock_start', sblock_end', wb'];
-d = pdist(features,'correlation');
-rdm_mat = squareform(d);
-imagesc(rdm_mat)
-axis tight equal
-
-for sub = 1:subj_ind-1
-    cnt = 1;
-    for block = 1:10
-        for trial = 1:27
-            
-            X(cnt,:) = [features(first_ind(sub,block,trial),:), features(first_ind(sub,block,trial)+3,:)];
-            y(cnt) = first_ind_acc(sub,block,trial);
-            cnt = cnt + 1;
-        end
-    end
-    
-    % MVPA
-    SVMModel = fitcsvm(X,y,'KernelFunction','linear');
-    CVSVMModel = crossval(SVMModel);
-    classAcc(sub) = 1 - kfoldLoss(CVSVMModel);
-    
-%     % multiple regression
-%     [b{sub},bint{sub},r{sub},rint{sub},rstats{sub}] = regress(y',[ones(270,1), X(:,1:6)]);
-%     [B{sub},dev{sub},lrstats{sub}] = mnrfit([ones(270,1), X(:,1:6)], categorical(y'));
-%     
-end
-
-[h,p,ci,stats] = ttest(classAcc);
-% [h,p,ci,stats] = ttest(r);
-
-
-
-%% temporal distance of: temporal memory (correct vs. incorrect) x  boundary (within vs. between)
-for s = 1:(subj_ind-1)
-
-    % within
-    within_correct_ind = find(wb_order_acc{s,1,:} == 1);
-    within_incorrect_ind = find(wb_order_acc{s,1,:} == 0);
-    within_correct_distance(s) = mean(wb_distance_rating{s,1,:}(within_correct_ind));
-    within_incorrect_distance(s) = mean(wb_distance_rating{s,1,:}(within_incorrect_ind));
-    % between-small
-    bsmall_correct_ind = find(wb_order_acc{s,2,:} == 1);
-    bsmall_incorrect_ind = find(wb_order_acc{s,2,:} == 0);
-    bsmall_correct_distance(s) = mean(wb_distance_rating{s,2,:}(bsmall_correct_ind));
-    bsmall_incorrect_distance(s) = mean(wb_distance_rating{s,2,:}(bsmall_incorrect_ind));
-    % between-small
-    bbig_correct_ind = find(wb_order_acc{s,3,:} == 1);
-    bbig_incorrect_ind = find(wb_order_acc{s,3,:} == 0);
-    bbig_correct_distance(s) = mean(wb_distance_rating{s,2,:}(bbig_correct_ind));
-    bbig_incorrect_distance(s) = mean(wb_distance_rating{s,2,:}(bbig_incorrect_ind));
-
-end
-
-[H,P,CI,STATS] = ttest(within_correct_distance, within_incorrect_distance);
-[H,P,CI,STATS] = ttest(bsmall_correct_distance, bsmall_incorrect_distance);
-[H,P,CI,STATS] = ttest(bbig_correct_distance, bbig_incorrect_distance);
-
-% ANOVA distance
-anova_dist = [within_correct_distance', bsmall_correct_distance', bbig_correct_distance',...
-    within_incorrect_distance', bsmall_incorrect_distance', bbig_incorrect_distance'];
-varnames = {'CorrectWithin','CorrectSmall','CorrectBig','IncorrectWithin','IncorrectSmall','IncorrectBig'};
-t = table(anova_dist(:,1),anova_dist(:,2),anova_dist(:,3),anova_dist(:,4),anova_dist(:,5),anova_dist(:,6),...
-    'VariableNames',varnames);
-within = table(['C','C','C','I','I','I']',['W','B','W','B','W','B']','VariableNames',{'OrderAccuracy', 'BoundaryType'});
-rm = fitrm(t,'CorrectWithin,CorrectSmall,CorrectBig,IncorrectWithin,IncorrectSmall,IncorrectBig ~1','WithinDesign', within);
-ranovatable_distance = ranova(rm,'WithinModel','OrderAccuracy*BoundaryType');
-
-bar_input = [nanmean(within_correct_distance), nanmean(bsmall_correct_distance), nanmean(bbig_correct_distance);
-    nanmean(within_incorrect_distance), nanmean(bsmall_incorrect_distance), nanmean(bbig_incorrect_distance)]';
-errorbar_input = [nanstd(within_correct_distance)/sqrt(subj_ind-1), nanstd(bsmall_correct_distance)/sqrt(subj_ind-1), nanstd(bbig_correct_distance)/sqrt(subj_ind-1);
-    nanstd(within_incorrect_distance)/sqrt(subj_ind-1), nanstd(bsmall_incorrect_distance)/sqrt(subj_ind-1), nanstd(bbig_incorrect_distance)/sqrt(subj_ind-1)]';
-[bar_xtick,hb,he] = errorbar_groups(bar_input,errorbar_input);
+%% memory RT over 10 trials
+xx = 1:10;
+% temporal memory over time
+figure(7); hold on
+errorbar(1:10,mean(order_rt),std(order_rt)/sqrt(subj_ind-1), 'o-','MarkerSize',3,'Color',[189,189,189]/255,'LineWidth',1.5)
+xticklabels({'1 vs 4', '2 vs 5', '3 vs 6', '4 vs 7', '5 vs 8', '6 vs 9', '7 vs 10', '8 vs 1', '9 vs 2', '10 vs 3'})
+ylabel('reaction time (ms)')
+xlabel('queried pairs')
 ax = gca;
-ax.FontSize = 14;
-ylim([1,4])
-xticklabels({'Correct', 'Incorrect'})
-legend({'within', 'between-small', 'between-big'})
-ylabel('temporal distance judgement')
+ax.FontSize = 18;
+ax.XLim = [0 11];
+ax.YLim = [2000 4500];
 set(gcf,'color','w');
+print(gcf,fullfile(fig_path,'Exp2_TemporalOrderRT.eps'),'-depsc2','-painters');
+
+%comparisons_between_bars(xx, order_rt)
+
+% temporal distance over time
+figure(8); hold on
+errorbar(1:10,mean(distance_rt),std(distance_rt)/sqrt(subj_ind-1), 'o-','MarkerSize',3,'Color',[189,189,189]/255,'LineWidth',1.5)
+xticklabels({'1 vs 4', '2 vs 5', '3 vs 6', '4 vs 7', '5 vs 8', '6 vs 9', '7 vs 10', '8 vs 1', '9 vs 2', '10 vs 3'})
+ylabel('reaction time (ms)')
+xlabel('queried pairs')
+ax = gca;
+ax.FontSize = 18;
+ax.XLim = [0 11];
+ax.YLim = [1000 2500];
+set(gcf,'color','w');
+print(gcf,fullfile(fig_path,'Exp2_TemporalDistanceRT.eps'),'-depsc2','-painters');
+
+%comparisons_between_bars(xx, distance_rt)
+
+%% memory RT by condition
+xx = [1,2,3];
+
+% temporal memory over time
+figure(9); hold on
+bar(mean(cond_order_rt),'FaceColor',[189,189,189]/255); hold on
+errorbar(mean(cond_order_rt),std(cond_order_rt)/sqrt(subj_ind-1),'.k')
+xticks([1,2,3])
+xticklabels({'within', 'small', 'big'})
+ylabel('reaction time of temporal order memory (ms)')
+ax = gca;
+ax.FontSize = 18;
+ax.YLim = [2000 4500];
+set(gcf,'color','w');
+comparisons_between_bars(xx, cond_order_rt)
+print(gcf,fullfile(fig_path,'Exp2_TemporalOrderConditionRT.eps'),'-depsc2','-painters');
+
+
+% temporal distance over time
+figure(10); hold on
+bar(mean(cond_distance_rt),'FaceColor',[189,189,189]/255); hold on
+errorbar(mean(cond_distance_rt),std(cond_distance_rt)/sqrt(subj_ind-1),'.k')
+xticks([1,2,3])
+xticklabels({'within', 'small', 'big'})
+ylabel('reaction time of temporal distance rating (ms)')
+ax = gca;
+ax.FontSize = 18;
+ax.YLim = [1000 2500];
+set(gcf,'color','w');
+comparisons_between_bars(xx, cond_distance_rt)
+print(gcf,fullfile(fig_path,'Exp2_TemporalDistanceConditionRT.eps'),'-depsc2','-painters');
+
+% %% MPVA with features: (start and end) of (run, big block, small block)
+% run_start = 1:1:30;
+% run_end = 30:-1:1;
+% bblock_start = repmat(1:1:10,1,3);
+% bblock_end = repmat(10:-1:1,1,3);
+% sblock_start = repmat(1:1:5,1,6);
+% sblock_end = repmat(5:-1:1,1,6);
+% wb = [0,0,1,1,1,0,0,2,2,2,0,0,1,1,1,0,0,2,2,2,0,0,1,1,1,0,0,2,2,2];
+% 
+% figure(11);
+% features = [run_start', run_end', bblock_start', bblock_end', sblock_start', sblock_end', wb'];
+% d = pdist(features,'correlation');
+% rdm_mat = squareform(d);
+% imagesc(rdm_mat)
+% axis tight equal
+% 
+% for sub = 1:subj_ind-1
+%     cnt = 1;
+%     for block = 1:10
+%         for trial = 1:27
+%             
+%             X(cnt,:) = [features(first_ind(sub,block,trial),:), features(first_ind(sub,block,trial)+3,:)];
+%             y(cnt) = first_ind_acc(sub,block,trial);
+%             cnt = cnt + 1;
+%         end
+%     end
+%     
+%     % MVPA
+%     SVMModel = fitcsvm(X,y,'KernelFunction','linear');
+%     CVSVMModel = crossval(SVMModel);
+%     classAcc(sub) = 1 - kfoldLoss(CVSVMModel);
+%     
+% %     % multiple regression
+% %     [b{sub},bint{sub},r{sub},rint{sub},rstats{sub}] = regress(y',[ones(270,1), X(:,1:6)]);
+% %     [B{sub},dev{sub},lrstats{sub}] = mnrfit([ones(270,1), X(:,1:6)], categorical(y'));
+% %     
+% end
+% 
+% [h,p,ci,stats] = ttest(classAcc);
+% % [h,p,ci,stats] = ttest(r);
+% 
+% 
+% 
+% %% temporal distance of: temporal memory (correct vs. incorrect) x  boundary (within vs. between)
+% for s = 1:(subj_ind-1)
+% 
+%     % within
+%     within_correct_ind = find(wb_order_acc{s,1,:} == 1);
+%     within_incorrect_ind = find(wb_order_acc{s,1,:} == 0);
+%     within_correct_distance(s) = mean(wb_distance_rating{s,1,:}(within_correct_ind));
+%     within_incorrect_distance(s) = mean(wb_distance_rating{s,1,:}(within_incorrect_ind));
+%     % between-small
+%     bsmall_correct_ind = find(wb_order_acc{s,2,:} == 1);
+%     bsmall_incorrect_ind = find(wb_order_acc{s,2,:} == 0);
+%     bsmall_correct_distance(s) = mean(wb_distance_rating{s,2,:}(bsmall_correct_ind));
+%     bsmall_incorrect_distance(s) = mean(wb_distance_rating{s,2,:}(bsmall_incorrect_ind));
+%     % between-small
+%     bbig_correct_ind = find(wb_order_acc{s,3,:} == 1);
+%     bbig_incorrect_ind = find(wb_order_acc{s,3,:} == 0);
+%     bbig_correct_distance(s) = mean(wb_distance_rating{s,2,:}(bbig_correct_ind));
+%     bbig_incorrect_distance(s) = mean(wb_distance_rating{s,2,:}(bbig_incorrect_ind));
+% 
+% end
+% 
+% [H,P,CI,STATS] = ttest(within_correct_distance, within_incorrect_distance);
+% [H,P,CI,STATS] = ttest(bsmall_correct_distance, bsmall_incorrect_distance);
+% [H,P,CI,STATS] = ttest(bbig_correct_distance, bbig_incorrect_distance);
+% 
+% % ANOVA distance
+% anova_dist = [within_correct_distance', bsmall_correct_distance', bbig_correct_distance',...
+%     within_incorrect_distance', bsmall_incorrect_distance', bbig_incorrect_distance'];
+% varnames = {'CorrectWithin','CorrectSmall','CorrectBig','IncorrectWithin','IncorrectSmall','IncorrectBig'};
+% t = table(anova_dist(:,1),anova_dist(:,2),anova_dist(:,3),anova_dist(:,4),anova_dist(:,5),anova_dist(:,6),...
+%     'VariableNames',varnames);
+% within = table(['C','C','C','I','I','I']',['W','B','W','B','W','B']','VariableNames',{'OrderAccuracy', 'BoundaryType'});
+% rm = fitrm(t,'CorrectWithin,CorrectSmall,CorrectBig,IncorrectWithin,IncorrectSmall,IncorrectBig ~1','WithinDesign', within);
+% ranovatable_distance = ranova(rm,'WithinModel','OrderAccuracy*BoundaryType');
+% 
+% bar_input = [nanmean(within_correct_distance), nanmean(bsmall_correct_distance), nanmean(bbig_correct_distance);
+%     nanmean(within_incorrect_distance), nanmean(bsmall_incorrect_distance), nanmean(bbig_incorrect_distance)]';
+% errorbar_input = [nanstd(within_correct_distance)/sqrt(subj_ind-1), nanstd(bsmall_correct_distance)/sqrt(subj_ind-1), nanstd(bbig_correct_distance)/sqrt(subj_ind-1);
+%     nanstd(within_incorrect_distance)/sqrt(subj_ind-1), nanstd(bsmall_incorrect_distance)/sqrt(subj_ind-1), nanstd(bbig_incorrect_distance)/sqrt(subj_ind-1)]';
+% [bar_xtick,hb,he] = errorbar_groups(bar_input,errorbar_input);
+% ax = gca;
+% ax.FontSize = 14;
+% ylim([1,4])
+% xticklabels({'Correct', 'Incorrect'})
+% legend({'within', 'between-small', 'between-big'})
+% ylabel('temporal distance judgement')
+% set(gcf,'color','w');
